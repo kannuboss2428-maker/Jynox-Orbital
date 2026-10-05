@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jynox Orbital • Next-Gen Discord Bot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: #131b2e;
+            --bg-card-hover: #1a243f;
+            --accent: #5865f2;
+            --accent-hover: #4752c4;
+            --success: #57f287;
+            --danger: #ed4245;
+            --warning: #fee75c;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --glow: rgba(88, 101, 242, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.25rem;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 20px var(--glow);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(88, 101, 242, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 180px 8% 100px 8%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(circle at 50% 20%, rgba(88, 101, 242, 0.12) 0%, transparent 60%);
+        }
+
+        .badge {
+            background: rgba(88, 101, 242, 0.1);
+            color: var(--accent);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border: 1px solid rgba(88, 101, 242, 0.2);
+            margin-bottom: 24px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -1.5px;
+            max-width: 900px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, #5865f2 0%, #a259ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            max-width: 650px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-main);
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .stat-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 8%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 32px;
+            border-radius: 16px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(88, 101, 242, 0.4);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(88, 101, 242, 0.1);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Simulator Section */
+        .simulator-section {
+            padding: 100px 8%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .terminal {
+            background: #1e1f22;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .terminal-header {
+            background: #2b2d31;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: var(--danger); }
+        .dot-yellow { background: var(--warning); }
+        .dot-green { background: var(--success); }
+
+        .terminal-title {
+            margin-left: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .terminal-body {
+            padding: 24px;
+            height: 380px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .chat-content .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .chat-content .username {
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .chat-content .bot-tag {
+            background: var(--accent);
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .chat-content .timestamp {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .embed-box {
+            background: #2b2d31;
+            border-left: 4px solid var(--accent);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 8px;
+            max-width: 500px;
+        }
+
+        .terminal-footer {
+            padding: 16px 20px;
+            background: #2b2d31;
+            display: flex;
+            gap: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .cmd-btn {
+            background: #313338;
+            border: none;
+            color: var(--text-main);
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+            transition: background 0.2s;
+        }
+
+        .cmd-btn:hover {
+            background: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-card);
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-links a {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            color: var(--text-main);
+        }
+
+        @media(max-width: 768px) {
+            .nav-links { display: none; }
+            .hero { padding-top: 140px; }
+            footer { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <a href="#" class="logo">
+            <i class="fa-solid fa-shield-halved"></i> Jynox Orbital
+        </a>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#simulator">Live Bot</a></li>
+            <li><a href="#commands">Commands</a></li>
+        </ul>
+        <a href="https://discord.com/oauth2/authorize?client_id=1556555159369420850&permissions=8&integration_type=0&scope=bot" target="_blank" class="btn-primary">
+            <i class="fa-brands fa-discord"></i> Add to Discord
+        </a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="badge">
+            <i class="fa-solid fa-bolt"></i> Powered by Discord.js & Lavalink
+        </div>
+        <h1>Next-Generation Security & Utility for <span>Discord</span></h1>
+        <p>Jynox Orbital is your all-in-one multi-purpose Discord bot offering advanced anti-nuke protection, automated logging, music playback, interactive ticketing, and games.</p>
+        
+        <div class="hero-actions">
+            <a href="https://discord.com/oauth2/authorize?client_id=1556555159369420850&permissions=8&integration_type=0&scope=bot" target="_blank" class="btn-primary">
+                <i class="fa-brands fa-discord"></i> Invite Bot Now
+            </a>
+            <a href="#features" class="btn-secondary">Explore Features</a>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-card">
+                <h3>99.9%</h3>
+                <p>Uptime Guaranteed</p>
+            </div>
+            <div class="stat-card">
+                <h3>6+</h3>
+                <p>Dedicated Log Channels</p>
+            </div>
+            <div class="stat-card">
+                <h3>24/7</h3>
+                <p>Music Streaming</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-title">
+            <h2>Powerful Features Built For Servers</h2>
+            <p>Everything you need to manage, protect, and entertain your community.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-shield-virus"></i></div>
+                <h3>Anti-Nuke & Audit Security</h3>
+                <p>Protect your server from malicious mass actions with customizable threshold windows, whitelists, and instant automated punishments.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-music"></i></div>
+                <h3>Lavalink Music Player</h3>
+                <p>High-performance audio streaming with zero lag, queue management, volume controls, and YouTube/source integration.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-ticket"></i></div>
+                <h3>Advanced Ticket System</h3>
+                <p>Instant ticket panel creation, category organization, support role permissions, and clean closure workflow.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+                <h3>6 Dedicated Log Channels</h3>
+                <p>Keep track of audit, moderation, messages, members, voice, and security events instantly in clean segregated channels.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-gamepad"></i></div>
+                <h3>Games & Engagement</h3>
+                <p>Keep members active with counting games, Akinator-style guessing challenges, invite trackers, and birthday schedulers.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-database"></i></div>
+                <h3>Server Snapshots & Backup</h3>
+                <p>Create and load comprehensive backups of roles, channel structures, and configurations with interactive safety checks.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Simulator -->
+    <section class="simulator-section" id="simulator">
+        <div class="section-title">
+            <h2>Test The Bot Live</h2>
+            <p>Click command buttons below to preview how Jynox Orbital responds.</p>
+        </div>
+
+        <div class="terminal">
+            <div class="terminal-header">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
+                <div class="terminal-title">jynox-orbital-terminal — discord chat</div>
+            </div>
+            <div class="terminal-body" id="terminalBody">
+                <div class="chat-message">
+                    <div class="chat-avatar">JO</div>
+                    <div class="chat-content">
+                        <div class="user-info">
+                            <span class="username">Jynox Orbital</span>
+                            <span class="bot-tag">BOT</span>
+                            <span class="timestamp">Today at 3:20 PM</span>
+                        </div>
+                        <p style="color: var(--text-muted);">System online. Type or click any command below to test features.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="terminal-footer">
+                <button class="cmd-btn" onclick="runCommand('/help')">/help</button>
+                <button class="cmd-btn" onclick="runCommand('/music play')">/music play</button>
+                <button class="cmd-btn" onclick="runCommand('/antinuke status')">/antinuke status</button>
+                <button class="cmd-btn" onclick="runCommand('/ticket panel')">/ticket panel</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="logo">
+            <i class="fa-solid fa-shield-halved"></i> Jynox Orbital
+        </div>
+        <p>&copy; 2026 Jynox Orbital. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#" target="_blank"><i class="fa-brands fa-discord"></i></a>
+            <a href="#" target="_blank"><i class="fa-brands fa-github"></i></a>
+            <a href="#" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        function runCommand(cmd) {
+            const body = document.getElementById('terminalBody');
+            
+            // User message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message';
+            userMsg.innerHTML = `
+                <div class="chat-avatar" style="background:#57f287; color:#0b0f19;">U</div>
+                <div class="chat-content">
+                    <div class="user-info">
+                        <span class="username">ServerOwner</span>
+                        <span class="timestamp">Just now</span>
+                    </div>
+                    <p>${cmd}</p>
+                </div>
+            `;
+            body.appendChild(userMsg);
+
+            // Bot response simulation
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'chat-message';
+                
+                let responseHTML = '';
+                if (cmd === '/help') {
+                    responseHTML = `
+                        <div class="embed-box">
+                            <strong style="color: #5865f2;">Jynox Orbital • Command Directory</strong>
+                            <p style="margin-top: 8px; font-size: 0.85rem; color: #94a3b8;">
+                                • <strong>Moderation:</strong> /ban, /kick, /timeout, /unban<br>
+                                • <strong>Security:</strong> /antinuke, /linkguard, /ipguard, /ipban<br>
+                                • <strong>Music:</strong> /music play, /skip, /pause, /volume<br>
+                                • <strong>Utilities:</strong> /setup, /ticket, /backup, /counting
+                            </p>
+                        </div>
+                    `;
+                } else if (cmd === '/music play') {
+                    responseHTML = `
+                        <div class="embed-box" style="border-left-color: #57f287;">
+                            <strong style="color: #57f287;">▶️ Lavalink Music Player</strong>
+                            <p style="margin-top: 8px; font-size: 0.85rem; color: #94a3b8;">
+                                Joined voice channel & started streaming track successfully via Lavalink node!
+                            </p>
+                        </div>
+                    `;
+                } else if (cmd === '/antinuke status') {
+                    responseHTML = `
+                        <div class="embed-box" style="border-left-color: #ed4245;">
+                            <strong style="color: #ed4245;">🛡️ Anti-Nuke Status</strong>
+                            <p style="margin-top: 8px; font-size: 0.85rem; color: #94a3b8;">
+                                Status: <strong>ENABLED</strong><br>
+                                Threshold: 3 actions / 10s<br>
+                                Punishment: Ban
+                            </p>
+                        </div>
+                    `;
+                } else {
+                    responseHTML = `
+                        <div class="embed-box">
+                            <strong>🎫 Ticket Panel Sent</strong>
+                            <p style="margin-top: 8px; font-size: 0.85rem; color: #94a3b8;">
+                                The ticket creation button panel has been deployed to the designated channel.
+                            </p>
+                        </div>
+                    `;
+                }
+
+                botMsg.innerHTML = `
+                    <div class="chat-avatar">JO</div>
+                    <div class="chat-content">
+                        <div class="user-info">
+                            <span class="username">Jynox Orbital</span>
+                            <span class="bot-tag">BOT</span>
+                            <span class="timestamp">Just now</span>
+                        </div>
+                        ${responseHTML}
+                    </div>
+                `;
+                body.appendChild(botMsg);
+                body.scrollTop = body.scrollHeight;
+            }, 500);
+
+            body.scrollTop = body.scrollHeight;
+        }
+    </script>
+</body>
+</html>
